@@ -1,0 +1,45 @@
+{
+  "inputs": [
+    {
+      "type": "promptString",
+      "id": "tfe_token",
+      "description": "HCP Terraform / Terraform Enterprise API token (optional – only needed for private registry or workspace operations)",
+      "password": true
+    }
+  ],
+  "servers": {
+    "drawio": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@drawio/mcp"],
+      "metadata": {
+        "description": "Official draw.io MCP server. Provides open_drawio_xml, open_drawio_csv, and open_drawio_mermaid tools to create and open draw.io diagrams."
+      }
+    },
+    "terraform": {
+      "type": "stdio",
+      "command": "docker",
+      "args": [
+        "run",
+        "-i",
+        "--rm",
+        "-e",
+        "TFE_TOKEN",
+        "hashicorp/terraform-mcp-server:latest"
+      ],
+      "env": {
+        "TFE_TOKEN": "${input:tfe_token}"
+      },
+      "metadata": {
+        "description": "HashiCorp Terraform MCP server. Provides access to the Terraform Registry for provider schemas, resource documentation, and module metadata."
+      }
+    },
+    "microsoft-learn": {
+      "type": "http",
+      "url": "https://learn.microsoft.com/api/mcp",
+      "metadata": {
+        "description": "Microsoft Learn MCP server. Provides microsoft_docs_search and microsoft_docs_fetch tools to query official Microsoft / Azure documentation."
+      }
+    }
+  }
+}
